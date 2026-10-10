@@ -36,12 +36,25 @@ static int constantLongInstruction(const char* name, Chunk* chunk, int offset) {
     return offset + 4;
 };
 
+int getLine(Chunk* chunk, int instruction) {
+    int remaining = instruction;
+
+    for (int i = 0; i < chunk->lineCount; i++) {
+        if (remaining < chunk->lines[i].count) {
+            return chunk->lines[i].line;
+        }
+        remaining -= chunk->lines[i].count;
+    }
+
+    return -1;
+}
+
 int disassembleInstruction(Chunk* chunk, int offset) {
     printf("%04d ", offset);
-    if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
+    if (offset > 0 && (getLine(chunk, offset) == getLine(chunk, offset - 1))) {
         printf("   | ");
     } else {
-        printf("%4d ", chunk->lines[offset]);
+        printf("%4d ", getLine(chunk, offset));
     }
 
     uint8_t instruction = chunk->code[offset];
