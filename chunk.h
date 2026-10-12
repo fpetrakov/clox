@@ -5,32 +5,37 @@
 #include "value.h"
 
 typedef enum {
+    OP_NEGATE,
+    OP_ADD,
+    OP_SUBSTRACT,
+    OP_MULTIPLY,
+    OP_DIVIDE,
     OP_CONSTANT,
     OP_CONSTANT_LONG,
     OP_RETURN,
 } OpCode;
 
 typedef struct {
-    int line;
-    int count;
+    uint32_t line;
+    uint32_t count;
 } LineRun;
 
 typedef struct {
-    int count;
-    int capacity;
+    uint32_t count;
+    uint32_t capacity;
     uint8_t* code;
 
-    int lineCount;
-    int lineCapacity;
+    uint32_t lineCount;
+    uint32_t lineCapacity;
     LineRun* lines;
 
     ValueArray constants;
 } Chunk;
 
-int getLine(Chunk*, int instruction);
+uint32_t getLine(Chunk*, uint32_t instruction);
 void initChunk(Chunk* chunk);
-void writeChunk(Chunk* chunk, uint8_t byte, int line);
+void writeChunk(Chunk* chunk, uint8_t byte, uint32_t line);
 void freeChunk(Chunk* chunk);
-int addConstant(Chunk* chunk, Value value);
+uint32_t addConstant(Chunk* chunk, Value value);
 
 #endif
