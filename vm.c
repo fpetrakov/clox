@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "memory.h"
 #include "object.h"
+#include "table.h"
 #include "value.h"
 #include "vm.h"
 #include "compiler.h"
@@ -34,9 +35,11 @@ Value pop() {
 void initVM() {
     resetStack();
     vm.objects = NULL;
+    initTable(&vm.strings);
 }
 
 void freeVM() {
+    freeTable(&vm.strings);
     freeObjects();
 }
 
