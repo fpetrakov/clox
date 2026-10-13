@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+
+#include "memory.h"
+#include "object.h"
+#include "value.h"
+#include "vm.h"
+
+static Obj* allocateObject(size_t size, ObjType type) {
+    Obj* object = (Obj*)reallocate(NULL, 0, size);
+    object->type = type;
+
+    object->next = vm.objects;
+    vm.objects = object;
+    return object;
+}
+
+#define ALLOCATE_OBJ(type, objectType) \
+    (type*)allocateObject(sizeof(type), objectType)
+
+static ObjString* allocateString(const char* chars, int length) {
+    ObjString* string = (ObjString*)allocateObject(sizeof(ObjString) + length + 1, OBJ_STRING);
+    string->length = length;
+    memcpy(string->chars, chars, length);
+    string->chars[length] = '\0';
+    return string;
+}
+
+ObjString* copyString(const char* chars, int length) {
+    return allocateString(chars, length);
+}
+
+void printObject(Value value) {
+    switch (OBJ_TYPE(value)) {
+        case OBJ_STRING:
+            printf("%s", AS_CSTRING(value));
+            break;
+    }
+}
+
+ObjString* takeString(char* chars, int length) {
+    ObjString* string = allocateString(chars, length);
+    FREE_ARRAY(char, chars, length + 1);
+    return string;
+}
