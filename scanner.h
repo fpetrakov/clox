@@ -28,8 +28,8 @@ typedef enum {
 typedef struct {
     TokenType type;
     const char* start;
-    uint32_t length;
-    uint32_t line;
+    int length;
+    int line;
 } Token;
 
 void initScanner(const char* source);

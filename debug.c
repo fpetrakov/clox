@@ -8,17 +8,17 @@
 void disassembleChunk(Chunk* chunk, const char* name) {
     printf("== %s ==\n", name);
 
-    for (uint32_t offset = 0; offset < chunk->count;) {
+    for (int offset = 0; offset < chunk->count;) {
         offset = disassembleInstruction(chunk, offset);
     }
 }
 
-static uint32_t simpleInstruction(const char* name, uint32_t offset) {
+static int simpleInstruction(const char* name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
 
-static uint32_t constantInstruction(const char* name, Chunk* chunk, uint32_t offset) {
+static int constantInstruction(const char* name, Chunk* chunk, int offset) {
     uint8_t constant = chunk->code[offset + 1];
     printf("%-16s %4d '", name, constant);
     printValue(chunk->constants.values[constant]);
@@ -26,8 +26,8 @@ static uint32_t constantInstruction(const char* name, Chunk* chunk, uint32_t off
     return offset + 2;
 };
 
-static uint32_t constantLongInstruction(const char* name, Chunk* chunk, uint32_t offset) {
-    uint32_t index = chunk->code[offset + 1]
+static int constantLongInstruction(const char* name, Chunk* chunk, int offset) {
+    int index = chunk->code[offset + 1]
         | (chunk->code[offset + 2] << 8)
         | (chunk->code[offset + 3] << 16);
     printf("%-16s %8d '", name, index);
@@ -36,10 +36,10 @@ static uint32_t constantLongInstruction(const char* name, Chunk* chunk, uint32_t
     return offset + 4;
 };
 
-uint32_t getLine(Chunk* chunk, uint32_t instruction) {
-    uint32_t remaining = instruction;
+int getLine(Chunk* chunk, int instruction) {
+    int remaining = instruction;
 
-    for (uint32_t i = 0; i < chunk->lineCount; i++) {
+    for (int i = 0; i < chunk->lineCount; i++) {
         if (remaining < chunk->lines[i].count) {
             return chunk->lines[i].line;
         }
@@ -49,7 +49,7 @@ uint32_t getLine(Chunk* chunk, uint32_t instruction) {
     return -1;
 }
 
-uint32_t disassembleInstruction(Chunk* chunk, uint32_t offset) {
+int disassembleInstruction(Chunk* chunk, int offset) {
     printf("%04d ", offset);
     if (offset > 0 && (getLine(chunk, offset) == getLine(chunk, offset - 1))) {
         printf("   | ");
@@ -73,8 +73,22 @@ uint32_t disassembleInstruction(Chunk* chunk, uint32_t offset) {
             return constantLongInstruction("OP_CONSTANT_LONG", chunk, offset);
         case OP_CONSTANT:
             return constantInstruction("OP_CONSTANT", chunk, offset);
+        case OP_NIL:
+            return simpleInstruction("OP_NIL", offset);
+        case OP_TRUE:
+            return simpleInstruction("OP_TRUE", offset);
+        case OP_FALSE:
+            return simpleInstruction("OP_FALSE", offset);
+        case OP_EQUAL:
+            return simpleInstruction("OP_EQUAL", offset);
+        case OP_GREATER:
+            return simpleInstruction("OP_GREATER", offset);
+        case OP_LESS:
+            return simpleInstruction("OP_LESS", offset);
         case OP_RETURN:
             return simpleInstruction("OP_RETURN", offset);
+        case OP_NOT:
+          return simpleInstruction("OP_NOT", offset);
         default:
             printf("Unknown opcode %d\n", instruction);
             return offset + 1;

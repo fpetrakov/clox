@@ -5,7 +5,7 @@
 typedef struct {
     const char* start;
     const char* current;
-    uint32_t line;
+    int line;
 } Scanner;
 
 Scanner scanner;
@@ -120,7 +120,7 @@ static bool isAlpha(char c) {
             c == '_';
 }
 
-static TokenType checkKeyword(uint32_t start, uint32_t length, const char* rest, TokenType type) {
+static TokenType checkKeyword(int start, int length, const char* rest, TokenType type) {
     if (scanner.current - scanner.start == start + length &&
         memcmp(scanner.start + start, rest, length) == 0) {
         return type;

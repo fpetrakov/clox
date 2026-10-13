@@ -13,9 +13,9 @@ void initChunk(Chunk* chunk) {
     initValueArray(&chunk->constants);
 }
 
-void writeChunk(Chunk* chunk, uint8_t byte, uint32_t line) {
+void writeChunk(Chunk* chunk, uint8_t byte, int line) {
   if (chunk->capacity < chunk->count + 1) {
-    uint32_t oldCapacity = chunk->capacity;
+    int oldCapacity = chunk->capacity;
     chunk->capacity = GROW_CAPACITY(oldCapacity);
     chunk->code = GROW_ARRAY(uint8_t, chunk->code, oldCapacity, chunk->capacity);
   }
@@ -29,7 +29,7 @@ void writeChunk(Chunk* chunk, uint8_t byte, uint32_t line) {
   }
 
   if (chunk->lineCapacity < chunk->lineCount + 1) {
-    uint32_t oldCapacity = chunk->lineCapacity;
+    int oldCapacity = chunk->lineCapacity;
     chunk->lineCapacity = GROW_CAPACITY(oldCapacity);
     chunk->lines = GROW_ARRAY(LineRun, chunk->lines, oldCapacity, chunk->lineCapacity);
   }
@@ -39,8 +39,8 @@ void writeChunk(Chunk* chunk, uint8_t byte, uint32_t line) {
   chunk->lineCount++;
 }
 
-void writeConstant(Chunk* chunk, Value value, uint32_t line) {
-    uint32_t index = addConstant(chunk, value);
+void writeConstant(Chunk* chunk, Value value, int line) {
+    int index = addConstant(chunk, value);
 
     if (index < 256) {
         writeChunk(chunk, OP_CONSTANT, line);
@@ -60,7 +60,7 @@ void freeChunk(Chunk* chunk) {
     initChunk(chunk);
 }
 
-uint32_t addConstant(Chunk* chunk, Value value) {
+int addConstant(Chunk* chunk, Value value) {
     writeValueArray(&chunk->constants, value);
     return chunk->constants.count - 1;
 }
