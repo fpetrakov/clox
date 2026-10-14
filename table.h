@@ -1,7 +1,7 @@
 #ifndef clox_table_h
 #define clox_table_h
 
-#include "common.h""
+#include <stdint.h>
 #include "value.h"
 
 #define TABLE_MAX_LOAD 0.75

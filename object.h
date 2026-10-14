@@ -1,8 +1,8 @@
 #ifndef clox_object_h
 #define clox_object_h
 
-#include "common.h"
 #include "value.h"
+#include <stdint.h>
 
 #define OBJ_TYPE(value)  (AS_OBJ(value)->type)
 #define IS_STRING(value) isObjType(value, OBJ_STRING)
