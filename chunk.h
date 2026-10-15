@@ -1,7 +1,8 @@
 #ifndef clox_chunk_h
 #define clox_chunk_h
 
-#include "common.h"
+#include <stdint.h>
+
 #include "value.h"
 
 typedef enum {
@@ -10,6 +11,7 @@ typedef enum {
 	OP_JUMP,
 	OP_JUMP_IF_FALSE,
 	OP_POP,
+	OP_CALL,
 	OP_LOOP,
 	OP_GET_LOCAL,
 	OP_GET_GLOBAL,
