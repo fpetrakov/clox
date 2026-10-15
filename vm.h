@@ -3,25 +3,25 @@
 
 #include "chunk.h"
 #include "stdint.h"
-#include "value.h"
 #include "table.h"
+#include "value.h"
 
 #define STACK_MAX 256
 
 typedef struct {
-    Chunk* chunk;
-    uint8_t* ip;
-    Value stack[STACK_MAX];
-    Value* stackTop;
-    Table strings;
-    Obj* objects;
-    Table globals;
+	Chunk* chunk;
+	uint8_t* ip;
+	Value stack[STACK_MAX];
+	Value* stackTop;
+	Table strings;
+	Obj* objects;
+	Table globals;
 } VM;
 
 typedef enum {
-    INTERPRET_OK,
-    INTERPRET_COMPILE_ERROR,
-    INTERPRET_RUNTIME_ERROR
+	INTERPRET_OK,
+	INTERPRET_COMPILE_ERROR,
+	INTERPRET_RUNTIME_ERROR
 } InterpretResult;
 
 extern VM vm;
