@@ -23,6 +23,11 @@ static void freeObject(Obj* object) {
             reallocate(string, sizeof(ObjString) + string->length + 1, 0);
             break;
         }
+        case OBJ_FUNCTION: {
+            ObjFunction* function = (ObjFunction*)object;
+            FREE(ObjFunction, object);
+            break;
+        }
     }
 }
 
