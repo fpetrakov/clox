@@ -1,5 +1,4 @@
-#ifndef clox_memory_h
-#define clox_memory_h
+#pragma once
 
 #include "common.h"
 #include "compiler.h"
@@ -26,5 +25,3 @@ void markValue(Value value);
 void markObject(Obj* object);
 void markTable(Table* table);
 void tableRemoveWhite(Table* table);
-
-#endif
